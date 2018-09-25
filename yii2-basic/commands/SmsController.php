@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 
 /**
  * Class SmsController
- * Отправка смс
+ * Отправка смс учасникам рассылки
  * @package app\controllers
  */
 class SmsController extends Controller
