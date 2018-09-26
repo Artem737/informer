@@ -86,9 +86,9 @@ class SmsController extends Controller
 
             $sender = new Sender([
                 Sender::TEST_NUMBER,
-                Sender::CONSTANTIN_NYMBER,
-                Sender::OWNER1_NUMBER,
-                Sender::OWNER2_NUMBER,
+//                Sender::CONSTANTIN_NYMBER,
+//                Sender::OWNER1_NUMBER,
+//                Sender::OWNER2_NUMBER,
 //            Sender::MIHAIL_NYMBER,
 //            Sender::ALEXEY_NUMBER,
             ], $message);
