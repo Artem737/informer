@@ -3,6 +3,10 @@
 namespace app\controllers;
 
 use app\common\sms\Sender;
+use app\report\render\ClientsBuyReport;
+use app\report\render\ClientsCountReport;
+use app\report\render\TestDriveReport;
+use app\report\render\TotalClientsReport;
 use app\report\factory\ReportFactory;
 use Yii;
 use yii\filters\AccessControl;
@@ -134,6 +138,12 @@ class SiteController extends Controller
     {
         $post = \Yii::$app->request->post();
         $alias = ArrayHelper::getValue($post, 'reportAlias');
+        $reports = [
+            new ClientsCountReport(),
+            new TotalClientsReport(),
+            new TestDriveReport(),
+            new ClientsBuyReport(),
+        ];
 
         if($alias) {
             $reportBuilder =  ReportFactory::makeReportBuilder($alias, $post);
@@ -141,7 +151,9 @@ class SiteController extends Controller
             \Yii::$app->response->sendFile($reportBuilder->getFile());
 
         } else {
-            return $this->render('reports');
+            return $this->render('reports', [
+                'reports' => $reports
+            ]);
         }
     }
 

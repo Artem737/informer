@@ -21,6 +21,7 @@ abstract class AbstractReportBuilder implements ReportBuilderInterface
     protected $sheets;
     protected $sheetNames;
     protected $data;
+    protected $deferredData = [];
     private $reportTimestamp;
 
     public abstract function getQuery();
@@ -173,6 +174,7 @@ abstract class AbstractReportBuilder implements ReportBuilderInterface
         $this->setSheets($this->createSheetNames());
         $this->setStyle();
         $this->writeData();
+        $this->writeDeferredData();
 
         $objWriter = new PHPExcel_Writer_Excel2007($this->excel);
         $objWriter->save($this->getFile());
@@ -195,4 +197,37 @@ abstract class AbstractReportBuilder implements ReportBuilderInterface
     {
         return $this->sheetNames;
     }
+
+    /**
+     * @param string $sheet
+     * @param int $x
+     * @param int $y
+     * @param string $initValue
+     * @param bool $strIndex
+     */
+    public function setDeferredData($sheet, $x, $y, $initValue = '', $strIndex = true)
+    {
+        if(!$strIndex) {
+            $x = PhpExcelHelper::indexToString($x);
+        }
+
+        $this->deferredData[$sheet][$x][$y] = $initValue;
+    }
+
+    /**
+     * @throws \PHPExcel_Exception
+     */
+    public function writeDeferredData()
+    {
+        foreach ($this->deferredData as $sheetName => $sheet) {
+            $this->excel->setActiveSheetIndexByName($sheetName);
+            foreach ($sheet as $x => $row) {
+                foreach ($row as $y => $data) {
+                    $this->writeToCellStrIndex($x . $y, $data);
+                }
+            }
+        }
+    }
+
+
 }
