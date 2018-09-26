@@ -2,6 +2,7 @@
 
 namespace app\report\builders;
 use app\common\helpers\DateHelper;
+use app\common\helpers\MathHelper;
 use app\common\helpers\PhpExcelHelper;
 use app\common\Rate;
 use app\report\exception\ReportException;
@@ -203,7 +204,7 @@ class TotalClientsReportBuilder extends AbstractReportBuilder
             }
 
             /*Total data by days in header*/
-            $this->writeDataByDay($total, $datesByIndex);
+            $this->writeDataByDay($total, $datesByIndex, $sheetName);
 
             $this->currentRow = self::ROW_INITIAL;
 
@@ -219,7 +220,13 @@ class TotalClientsReportBuilder extends AbstractReportBuilder
      */
     private function writeSheetCategory($categoryName, $data, array $datesByIndex)
     {
+        $percents = ArrayHelper::getValue($this->request, 'percents', 0);
+        $percents = $percents == 1 ? true : false;
+
         $initialRow = $this->currentRow++;
+        if ($percents) {
+            $this->currentRow++;
+        }
 
         $countCategory = [];
         $sumCategory = [];
@@ -260,6 +267,10 @@ class TotalClientsReportBuilder extends AbstractReportBuilder
         $this->writeToCell(0, $initialRow, $categoryName);
         $this->setCellRangeStyle(0, $initialRow, 2 + count($datesByIndex), $initialRow, $this->styles['colorBlue']);
 
+        if ($percents) {
+            $this->setCellRangeStyle(0, $initialRow + 1, 2 + count($datesByIndex), $initialRow + 1, $this->styles['colorBlue']);
+        }
+
         $count = 0;
         $sum = 0;
 
@@ -268,12 +279,33 @@ class TotalClientsReportBuilder extends AbstractReportBuilder
             $this->writeToCellStrIndex($datesByIndex[$date] . $initialRow, $amount);
         }
 
+        if ($percents) {
+            foreach ($countCategory as $date => $amount) {
+                $this->setDeferredData(
+                    $this->excel->getActiveSheet()->getTitle(),
+                    $datesByIndex[$date],
+                    $initialRow + 1,
+                    $amount
+                );
+            }
+        }
+
         foreach ($sumCategory as $date => $amount) {
             $sum += $amount;
         }
 
         $this->writeToCell(1 + count($datesByIndex),  $initialRow, $count);
         $this->writeToCell(2 + count($datesByIndex),  $initialRow, $sum);
+
+        if ($percents) {
+            $this->setDeferredData(
+                $this->excel->getActiveSheet()->getTitle(),
+                1 + count($datesByIndex),
+                $initialRow + 1,
+                $count,
+                false
+            );
+        }
 
         return [
             'count' => $countCategory,
@@ -284,9 +316,10 @@ class TotalClientsReportBuilder extends AbstractReportBuilder
     /**
      * @param array $total
      * @param array $daysByIndex
+     * @param $sheetName
      * @throws \PHPExcel_Exception
      */
-    private function writeDataByDay(array $total, array $daysByIndex)
+    private function writeDataByDay(array $total, array $daysByIndex, $sheetName)
     {
         $countByDate = [];
         $sumByDate = [];
@@ -316,8 +349,25 @@ class TotalClientsReportBuilder extends AbstractReportBuilder
         }
 
         foreach ($countByDate as $date => $count) {
-            $this->writeToCellStrIndex($daysByIndex[$date] . '3', $count);
-            $this->setCellStyleStrIndex($daysByIndex[$date] . '3', $this->styles['colorRed']);
+
+            $colIndex = $daysByIndex[$date];
+
+            $this->writeToCellStrIndex($colIndex . '3', $count);
+            $this->setCellStyleStrIndex($colIndex . '3', $this->styles['colorRed']);
+
+            if (isset($this->deferredData[$sheetName][$colIndex])) {
+                foreach ($this->deferredData[$sheetName][$colIndex] as $rowIndex => &$value) {
+                    $value = MathHelper::percent($value, $count, true);
+                }
+            }
+
+        }
+
+        $percentTotalCollIndex = PhpExcelHelper::indexToString(1 + count($daysByIndex));
+        if (isset($this->deferredData[$sheetName][$percentTotalCollIndex])) {
+            foreach ($this->deferredData[$sheetName][$percentTotalCollIndex] as $rowIndex => &$value) {
+                $value = MathHelper::percent($value, $totalCount, true);
+            }
         }
 
         $this->writeToCell(1 + count($daysByIndex), 3, $totalCount);

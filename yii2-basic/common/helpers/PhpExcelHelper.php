@@ -10,6 +10,16 @@ use PHPExcel_Cell;
  */
 class PhpExcelHelper
 {
+
+    /**
+     * @param int $index
+     * @return string
+     */
+    public static function indexToString($index)
+    {
+        return PHPExcel_Cell::stringFromColumnIndex($index);
+    }
+
     /**
      * @param int $x
      * @param int $y
@@ -17,7 +27,7 @@ class PhpExcelHelper
      */
     public static function getCellCoordinateByInt($x, $y)
     {
-        return PHPExcel_Cell::stringFromColumnIndex($x).$y;
+        return self::indexToString($x) . $y;
     }
 
     /**
