@@ -25,7 +25,7 @@ class TotalClientsReport implements ReportInterface
     public function getHtmlParams()
     {
         return HtmlHelper::renderRow(
-            HtmlHelper::renderCalendarFromTo('totalClients', 3) .
+            HtmlHelper::renderCalendarFromTo('totalClients', 3),
             HtmlHelper::renderSelect(
                 TotalClientsReportBuilder::SELECT_FORM_NAME,
                 'Группировка',
@@ -35,7 +35,7 @@ class TotalClientsReport implements ReportInterface
                     TotalClientsReportBuilder::BY_CATEGORY => 'Группировка по категориям посетителей',
                     TotalClientsReportBuilder::BY_DURATION => 'Группировка по продолжительности пребывания',
                 ]
-            ) .
+            ),
             HtmlHelper::renderCheckBox('percents', 'Строка процентов', 2)
         )
             ;

@@ -14,11 +14,12 @@ use kartik\select2\Select2;
 class HtmlHelper
 {
     /**
-     * @param string $innerContent
      * @return string
      */
-    public static function renderRow($innerContent)
+    public static function renderRow()
     {
+
+        $innerContent = implode(' ', func_get_args());
         return '<div class="row flex-center">' . $innerContent . '</div>';
     }
 
