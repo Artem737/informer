@@ -34,8 +34,8 @@ class ClientsBuyReport implements ReportInterface
         ];
 
         return HtmlHelper::renderRow(
-            HtmlHelper::renderCalendar(ClientsBuyReportBuilder::FORM_DATE_FROM_NAME, 'Время начала', 4) .
-            HtmlHelper::renderSelect(ClientsBuyReportBuilder::FORM_DAYS_NAME, 'Количество дней', 4, 1, $week) .
+            HtmlHelper::renderCalendar(ClientsBuyReportBuilder::FORM_DATE_FROM_NAME, 'Время начала', 4),
+            HtmlHelper::renderSelect(ClientsBuyReportBuilder::FORM_DAYS_NAME, 'Количество дней', 4, 1, $week),
             HtmlHelper::renderSelect(
                 ClientsBuyReportBuilder::SELECT_FORM_NAME,
                 'Вид',
