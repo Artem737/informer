@@ -45,18 +45,18 @@ AppAsset::register($this);
 //            ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Отчёты', 'url' => ['/site/report']],
             ['label' => 'Sms Рассылки', 'url' => ['/site/sms']],
-//            Yii::$app->user->isGuest ? (
-//                ['label' => 'Login', 'url' => ['/site/login']]
-//            ) : (
-//                '<li>'
-//                . Html::beginForm(['/site/logout'], 'post')
-//                . Html::submitButton(
-//                    'Logout (' . Yii::$app->user->identity->username . ')',
-//                    ['class' => 'btn btn-link logout']
-//                )
-//                . Html::endForm()
-//                . '</li>'
-//            )
+            Yii::$app->user->isGuest ? (
+                ['label' => 'Войти', 'url' => ['/site/login']]
+            ) : (
+                '<li>'
+                . Html::beginForm(['/site/logout'], 'post')
+                . Html::submitButton(
+                    'Выйти (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
+            )
         ],
     ]);
     NavBar::end();

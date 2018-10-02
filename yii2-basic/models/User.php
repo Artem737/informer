@@ -13,17 +13,45 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     private static $users = [
         '100' => [
             'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
+            'username' => 'alexy',
+            'password' => 'qw34rt',
+            'authKey' => '100keyForReportAndSms',
+            'accessToken' => '100-tokenForReportAndSms',
         ],
         '101' => [
             'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
+            'username' => 'konstantin',
+            'password' => 'as34df',
+            'authKey' => '101keyForReportAndSms',
+            'accessToken' => '101-tokenForReportAndSms',
+        ],
+        '102' => [
+            'id' => '102',
+            'username' => 'anna',
+            'password' => 'rt56ui',
+            'authKey' => '102keyForReportAndSms',
+            'accessToken' => '102-tokenForReportAndSms',
+        ],
+        '103' => [
+            'id' => '103',
+            'username' => 'artem',
+            'password' => 'zx67cv',
+            'authKey' => '103keyForReportAndSms',
+            'accessToken' => '103-tokenForReportAndSms',
+        ],
+        '104' => [
+            'id' => '104',
+            'username' => 'mihail',
+            'password' => 'gh76jk',
+            'authKey' => '104keyForReportAndSms',
+            'accessToken' => '104-tokenForReportAndSms',
+        ],
+        '105' => [
+            'id' => '105',
+            'username' => 'ilya',
+            'password' => 'yg67rd',
+            'authKey' => '105keyForReportAndSms',
+            'accessToken' => '105-tokenForReportAndSms',
         ],
     ];
 

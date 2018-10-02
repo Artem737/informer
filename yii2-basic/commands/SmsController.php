@@ -84,14 +84,9 @@ class SmsController extends Controller
             $totalSum = $totalAquaPark + $totalWeb;
             $message = 'Статистика от ' . $dateSms . ':' . PHP_EOL . $totalPeoples . PHP_EOL . $totalSum;
 
-            $sender = new Sender([
-                Sender::TEST_NUMBER,
-                Sender::CONSTANTIN_NYMBER,
-                Sender::OWNER1_NUMBER,
-                Sender::OWNER2_NUMBER,
-//            Sender::MIHAIL_NYMBER,
-//            Sender::ALEXEY_NUMBER,
-            ], $message);
+            $numbers = require (\Yii::$app->getBasePath() . '/numbers.php');
+
+            $sender = new Sender($numbers, $message);
             $result = $sender->send();
             $resultAsString = print_r($result, true);
 
