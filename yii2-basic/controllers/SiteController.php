@@ -105,45 +105,29 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
     public function actionReport()
     {
+        if(\Yii::$app->user->isGuest) {
+            return $this->render('need_auth');
+        }
+
         $post = \Yii::$app->request->post();
         $alias = ArrayHelper::getValue($post, 'reportAlias');
-        $reports = [
-            new ClientsCountReport(),
-            new TotalClientsReport(),
-            new TestDriveReport(),
-            new ClientsBuyReport(),
-        ];
+
+        if (\Yii::$app->user->identity->getId() == 105) {
+            $reports = [
+                new ClientsCountReport(),
+            ];
+        } else {
+            $reports = [
+                new ClientsCountReport(),
+                new TotalClientsReport(),
+                new TestDriveReport(),
+                new ClientsBuyReport(),
+            ];
+        }
+
+
 
         if($alias) {
             $reportBuilder =  ReportFactory::makeReportBuilder($alias, $post);
@@ -159,10 +143,15 @@ class SiteController extends Controller
 
     public function actionSms()
     {
+
+        if(\Yii::$app->user->isGuest) {
+            return $this->render('need_auth');
+        }
+
         $result = '';
         if(ArrayHelper::getValue(\Yii::$app->request->post(), 'sendSms')) {
-            $sender = new Sender([Sender::TEST_NUMBER], 'Тест отправки.');
-            $result = ArrayHelper::getValue($sender->send(), Sender::TEST_NUMBER);
+            $sender = new Sender(['79963761251'], 'Тест отправки.');
+            $result = ArrayHelper::getValue($sender->send(), '79963761251');
             $result = $result ? $result : 'Отправка СМС отключена';
         }
 

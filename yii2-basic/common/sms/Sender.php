@@ -8,12 +8,6 @@ use yii\helpers\ArrayHelper;
 class Sender
 {
     const API_KEY           = 'D379B08D-007F-079C-9204-11F883484B1D';
-    const TEST_NUMBER       = '79133837860';
-    const CONSTANTIN_NYMBER = '79607875911';
-    const MIHAIL_NYMBER     = '79139023517';
-    const ALEXEY_NUMBER     = '79139063485';
-    const OWNER1_NUMBER     = '79069950203';
-    const OWNER2_NUMBER     = '79030766056';
     const SENDER            = 'Аквамир';
 
     private $sender;
